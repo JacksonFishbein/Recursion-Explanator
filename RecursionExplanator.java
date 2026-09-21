@@ -1,29 +1,90 @@
 import java.util.*;
 import java.util.regex.*;
+import java.nio.file.*;
 
 public class RecursionExplanator {
    static Scanner scanner = new Scanner(System.in);
    public static void main(String[] args) {
       System.out.println("=== Recursion Explanator ===");
-      System.out.println("Paste the java code below.");
-      System.out.println("Type 'END' on a new line when done.");
       System.out.println();
+      System.out.println("What Input Would You Like To Use?");
+      System.out.println("1. Copy/Paste Java Code");
+      System.out.println("2. TXT File");
+      System.out.println("3. JAVA File");
+      System.out.println();
+      System.out.print("Enter Your Choice: ");
+      String choice = scanner.nextLine();
    
-      StringBuilder sourceCode = new StringBuilder();
-   
-      while (true) {
-         String line = scanner.nextLine();
+      String sourceCode = "";
       
-         if (line.equals("END")) {
-            break;
+      try {
+         if (choice.equals("1")) {
+            sourceCode = cmdInput();
          }
-   
-         sourceCode.append(line).append("\n");
+         else if (choice.equals("2")) {
+            sourceCode = fileInput(".txt");
+         }
+         else if (choice.equals("3")) {
+            sourceCode = fileInput(".java");
+         }
+         else {
+            System.out.println("Invalid Choice.");
+            scanner.close();
+            return;
+         }
+         
+         analyzeCode(sourceCode);
+         
+      } catch (Exception e) {
+         System.out.println("Error reading input: " + e.getMessage());
       }
-   
-      analyzeCode(sourceCode.toString());
-      scanner.close();
+      
+     scanner.close();
    }
+      
+      // Read CMD Copy/Paste Code
+      public static String cmdInput() {
+         System.out.println();
+         System.out.println("Paste the java code below.");
+         System.out.println("Type '113' on a new line when done.");
+         System.out.println();
+         
+         StringBuilder sourceCode = new StringBuilder();
+         
+         while (true) {
+            String line = scanner.nextLine();
+            
+            if (line.equals("113")) {
+               break;
+            }
+            
+            sourceCode.append(line).append("\n");
+         }
+         
+         return sourceCode.toString();
+      }  
+      
+      // Read File Path File
+      public static String fileInput(String extension) {
+         System.out.println();
+         System.out.print("Enter the path to the " + extension + " file: ");
+         
+         String filePath = scanner.nextLine();
+         
+         if (!filePath.toLowerCase().endsWith(extension)) {
+            System.out.println();
+            System.out.println("Please Enter a " + extension + " file path.");
+            return "";
+         }
+         
+         try {
+            return Files.readString(Paths.get(filePath));
+         }
+         catch (Exception e) {
+            System.out.println("Could not read file.");
+            return "";
+         }
+      }
 
    public static void analyzeCode(String code) {
    
