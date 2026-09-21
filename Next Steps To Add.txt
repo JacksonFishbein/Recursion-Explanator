@@ -3,3 +3,5 @@ Create menu screen with options of recursion analyze or learn recursion
 make the user be able to submit another input instead of breaking
 
 Fix The reading of java codes
+
+Make the read me visually appealing and explain how to use the program and what the users can do
