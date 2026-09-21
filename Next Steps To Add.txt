@@ -1,0 +1,3 @@
+Make the user be able to submit another entry after output
+Make more input files compatible (.java, .txt)
+Create menu screen with options of recursion analyze or learn recursion
