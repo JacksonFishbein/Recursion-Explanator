@@ -5,40 +5,47 @@ import java.nio.file.*;
 public class RecursionExplanator {
    static Scanner scanner = new Scanner(System.in);
    public static void main(String[] args) {
-      System.out.println("=== Recursion Explanator ===");
-      System.out.println();
-      System.out.println("What Input Would You Like To Use?");
-      System.out.println("1. Copy/Paste Java Code");
-      System.out.println("2. TXT File");
-      System.out.println("3. JAVA File");
-      System.out.println();
-      System.out.print("Enter Your Choice: ");
-      String choice = scanner.nextLine();
+      boolean looping = true; 
+
+      while (looping) {      
+         System.out.println("=== Recursion Explanator ===");
+         System.out.println();
+         System.out.println("What Input Would You Like To Use?");
+         System.out.println("1. Copy/Paste Java Code");
+         System.out.println("2. TXT File");
+         System.out.println("3. JAVA File");
+         System.out.println("4. Exit");
+         System.out.println();
+         System.out.print("Enter Your Choice: ");
+         String choice = scanner.nextLine();
    
-      String sourceCode = "";
+         String sourceCode = "";
       
-      try {
-         if (choice.equals("1")) {
-            sourceCode = cmdInput();
-         }
-         else if (choice.equals("2")) {
-            sourceCode = fileInput(".txt");
-         }
-         else if (choice.equals("3")) {
-            sourceCode = fileInput(".java");
-         }
-         else {
-            System.out.println("Invalid Choice.");
-            scanner.close();
-            return;
-         }
+         try {
+            if (choice.equals("1")) {
+               sourceCode = cmdInput();
+            }
+            else if (choice.equals("2")) {
+               sourceCode = fileInput(".txt");
+            }
+            else if (choice.equals("3")) {
+               sourceCode = fileInput(".java");
+            }
+            else if (choice.equals("4")) {
+               looping = false;
+               continue;
+            }
+            else {
+               System.out.println("Invalid Choice.");
+               continue;
+            }
          
-         analyzeCode(sourceCode);
+            analyzeCode(sourceCode);
          
-      } catch (Exception e) {
-         System.out.println("Error reading input: " + e.getMessage());
+         } catch (Exception e) {
+            System.out.println("Error reading input: " + e.getMessage());
+         }
       }
-      
      scanner.close();
    }
       
