@@ -6,10 +6,10 @@ public class RecursionExplanator {
    static Scanner scanner = new Scanner(System.in);
    public static void main(String[] args) {
       boolean looping = true; 
-
-      while (looping) {      
-         System.out.println("=== Recursion Explanator ===");
-         System.out.println();
+      
+      System.out.println("=== Recursion Explanator ===");
+      System.out.println();
+      while (looping) {   
          System.out.println("What Input Would You Like To Use?");
          System.out.println("1. Copy/Paste Java Code");
          System.out.println("2. TXT File");
