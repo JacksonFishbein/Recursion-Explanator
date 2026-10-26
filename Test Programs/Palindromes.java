@@ -1,31 +1,38 @@
 import java.util.Scanner;
-public class Palindromes
-{
 
-    public static boolean isPal(String s)
-    {
-        if(s.length() == 0  s.length() == 1)
-             if length =0 OR 1 then it is
-            return true; 
-        if(s.charAt(0) == s.charAt(s.length()-1))
-             check for first and last char of String
-             if they are same then do the same thing for a substring
-             with first and last char removed. and carry on this
-             until you string completes or condition fails
-            return isPal(s.substring(1, s.length()-1));
+public class PalindromeTest {
 
-         if its not the case than string is not.
-        return false;
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter a word to check if it is a palindrome: ");
+        String word = scanner.nextLine();
+
+        // Ignore capitalization
+        word = word.toLowerCase();
+
+        if (isPalindrome(word, 0, word.length() - 1)) {
+            System.out.println(word + " is a palindrome!");
+        } else {
+            System.out.println(word + " is not a palindrome.");
+        }
+
+        scanner.close();
     }
 
-    public static void main(String[]args)
-    {
-        Scanner sc = new Scanner(System.in);
-        System.out.println(type a word to check if its a palindrome or not);
-        String x = sc.nextLine();
-        if(isPal(x))
-            System.out.println(x +  is a palindrome);
-        else
-            System.out.println(x +  is not a palindrome);
+    public static boolean isPalindrome(String word, int left, int right) {
+
+        // Base case: the pointers have met or crossed
+        if (left >= right) {
+            return true;
+        }
+
+        // Recursive case: compare the outer characters
+        if (word.charAt(left) != word.charAt(right)) {
+            return false;
+        }
+
+        // Move inward and check the remaining characters
+        return isPalindrome(word, left + 1, right - 1);
     }
 }
