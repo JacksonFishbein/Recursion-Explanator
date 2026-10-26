@@ -9,7 +9,7 @@ public class RecursionExplanator {
       
       System.out.println("=== Recursion Explanator ===");
       System.out.println();
-      while (looping) {av   
+      while (looping) {   
          System.out.println("What Input Would You Like To Use?");
          System.out.println("1. Copy/Paste Java Code");
          System.out.println("2. TXT File");
@@ -41,6 +41,12 @@ public class RecursionExplanator {
             }
          
             analyzeCode(sourceCode);
+            
+            //Output running code
+            System.out.println();
+            System.out.println("=== Running Your Program ===");
+            RunInputProgram.run(sourceCode);
+            
          
          } catch (Exception e) {
             System.out.println("Error reading input: " + e.getMessage());
