@@ -23,10 +23,10 @@ public class RunInputProgram {
          }
 
          String className = matcher.group(1);
-         // Save the source code using the required filename
+         //Save the source code using the required filename
          Path javaFile = tempDir.resolve(className + ".java");
          Files.writeString(javaFile, sourceCode);
-         // Get the system Java compiler
+         //Get the system Java compiler
          JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
          
          if (compiler == null) {
@@ -34,7 +34,7 @@ public class RunInputProgram {
             return;
          }
          
-         // Compile the input program
+         //Compile the input program
          int result = compiler.run(null, null, null,"-d", tempDir.toString(),javaFile.toString());
 
          if (result != 0) {
@@ -42,7 +42,7 @@ public class RunInputProgram {
             return;
          }
 
-         // Run the compiled program as a separate process
+         //Run the compiled program as a separate process
          ProcessBuilder builder = new ProcessBuilder("java", "-cp", tempDir.toString(),className);
          builder.inheritIO();
          Process process = builder.start();
