@@ -1,10 +1,9 @@
-
 import java.io.*;
 import java.nio.file.*;
 import javax.tools.*;
 
 public class RunInputProgram {
-
+   
    public static void run(String sourceCode) {
       Path tempDir = null;
 
