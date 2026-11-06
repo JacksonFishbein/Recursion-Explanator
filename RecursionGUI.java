@@ -51,7 +51,7 @@ public class RecursionGUI extends JFrame{
         codeEditor.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JScrollPane editorScrollPane = new JScrollPane(codeEditor);
-        
+
         editorScrollPane.setBorder(BorderFactory.createTitledBorder("Java Code Editor"));
 
         add(editorScrollPane, BorderLayout.CENTER);
@@ -174,11 +174,23 @@ public class RecursionGUI extends JFrame{
 
     //Clears the Editor and resets the File
     private void clearEditor(){
-        codeEditor.setText("");
-        currentFile = null;
+        //Ask Users to confirm before clearing Editor
+        int confimration = JOptionPane.showConfirmDialog(
+            this, "Are you sure you want to clear the editor?\n" +
+                    "Any unsaved changes will be lost.",
+                    "Confirm Clear:",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE
+        );
 
-        fileStatus.setText("No File currently loaded");
-        setTitle("Recursive Explanator");
+        //Only clears editor if User selects yes
+        if (confimration == JOptionPane.YES_OPTION) {
+            codeEditor.setText("");
+            currentFile = null;
+
+            fileStatus.setText("No file currently loaded");
+            setTitle("Recursive Explanator");
+        }
     }
     
     public static void main(String[] args) {
