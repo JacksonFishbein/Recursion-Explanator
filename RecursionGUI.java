@@ -1,10 +1,22 @@
 import javax.swing.*;
 import java.awt.*;
 
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 public class RecursionGUI extends JFrame{
     //Main GUI window  dimensions
     private static final int WindowWidth = 1200;
     private static final int WindowHeight = 800;
+
+    //GUI components
+    private JTextArea codeEditor;
+    private JLabel fileStatus;
+
+    private File currentFile; //tracks the open Java File
     
     public RecursionGUI() {
         //Mian appllication window
@@ -14,7 +26,7 @@ public class RecursionGUI extends JFrame{
         setLocationRelativeTo(null);
 
         //Main Layout
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(10, 10));
 
         //Application Title
         JLabel title = new JLabel(
@@ -22,23 +34,157 @@ public class RecursionGUI extends JFrame{
         );
 
         title.setFont(new Font("Arial", Font.BOLD, 28));
-        title.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
+        title.setBorder(BorderFactory.createEmptyBorder(15, 10, 10, 10));
 
-        add(title, BorderLayout.NORTH);
+        //Top section
+        JPanel topPanel = new JPanel (new BorderLayout());
+        topPanel.add(title, BorderLayout.NORTH);
+        topPanel.add(createToolbar(), BorderLayout.CENTER);
 
-        //Start Instructions
-        JLabel welcome = new JLabel(
-            "Import or Create a Java program to begin.", SwingConstants.CENTER
+        add(topPanel, BorderLayout.NORTH);
+
+        //Code editor
+        codeEditor = new JTextArea();
+        codeEditor.setFont(new Font("Consolas", Font.PLAIN, 15));
+        codeEditor.setTabSize(4);
+        codeEditor.setLineWrap(false);
+        codeEditor.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JScrollPane editorScrollPane = new JScrollPane(codeEditor);
+        
+        editorScrollPane.setBorder(BorderFactory.createTitledBorder("Java Code Editor"));
+
+        add(editorScrollPane, BorderLayout.CENTER);
+
+        //File Status Bar
+        fileStatus = new JLabel("No file currently loaded");
+        fileStatus.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
+
+        add(fileStatus, BorderLayout.SOUTH);
+    }
+
+    //Toolbar for File Controls
+    private JPanel createToolbar() {
+        JPanel toolbar = new JPanel(
+            new FlowLayout(FlowLayout.LEFT, 10, 10)
         );
 
-        welcome.setFont(new Font("Arial", Font.PLAIN, 18));
-        add(welcome, BorderLayout.CENTER);
+        //Java File access buttons
+        JButton openButton = new JButton("Open Java File");
+        JButton saveButton = new JButton("Save File");
+        JButton clearButton = new JButton("Clear Editor");
+
+        openButton.addActionListener(e -> openJavaFile());
+        saveButton.addActionListener(e -> saveJavaFile());
+        clearButton.addActionListener(e -> clearEditor());
+
+        toolbar.add(openButton);
+        toolbar.add(saveButton);
+        toolbar.add(clearButton);
+
+        return toolbar;
+    }
+
+    //Opens the File Chooser and loads the Java Source File
+    private void openJavaFile() {
+        JFileChooser fileChooser = new JFileChooser();
+
+        fileChooser.setFileFilter(
+            new FileNameExtensionFilter(
+                "Java Source Files (*.java)",
+                "java"
+            )
+        );
+
+        int result = fileChooser.showOpenDialog(this);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+
+            try {
+                String sourceCode = Files.readString(
+                    selectedFile.toPath()
+                );
+
+                codeEditor.setText(sourceCode);
+                codeEditor.setCaretPosition(0);
+
+                currentFile = selectedFile;
+
+                fileStatus.setText(
+                    "Loaded: " + currentFile.getName()
+                );
+
+                setTitle( "Recursive Explanator -" + currentFile.getName());
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(
+                    this, "Could not open selected file:\n" + ex.getMessage(),
+                    "File Error", JOptionPane.ERROR_MESSAGE
+                );
+            }
+        }
+    }
+
+    //Saves the contents of the editor to the current File
+    private void saveJavaFile(){
+        if (currentFile == null) {
+            JFileChooser fileChooser = new JFileChooser();
+
+            fileChooser.setFileFilter(
+                new FileNameExtensionFilter(
+                    "Java Source Files (*.java)",
+                    "java"
+                )
+            );
+
+            int result = fileChooser.showSaveDialog(this);
+
+            if (result != JFileChooser.APPROVE_OPTION) {
+                return;
+            }
+
+            currentFile = fileChooser.getSelectedFile();
+
+            if (!currentFile.getName().toLowerCase().endsWith(".java")) {
+                currentFile = new File(
+                    currentFile.getAbsolutePath() + ".java"
+                );
+            }
+        }
+        
+        try {
+            Files.writeString(
+                currentFile.toPath(), codeEditor.getText()
+            );
+
+            fileStatus.setText(
+                "Saved: " + currentFile.getName()
+            );
+
+            setTitle(
+                "Recursive Explanator - " + currentFile.getName()
+            );
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(
+                this, "could not save the file:\n" + ex.getMessage(),
+                "Save Error", JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
+    //Clears the Editor and resets the File
+    private void clearEditor(){
+        codeEditor.setText("");
+        currentFile = null;
+
+        fileStatus.setText("No File currently loaded");
+        setTitle("Recursive Explanator");
     }
     
     public static void main(String[] args) {
-    SwingUtilities.invokeLater(() -> {
-        RecursionGUI gui = new RecursionGUI();
-        gui.setVisible(true);
-    });
-}
+        SwingUtilities.invokeLater(() -> {
+            RecursionGUI gui = new RecursionGUI();
+            gui.setVisible(true);
+        });
+    }
 }
