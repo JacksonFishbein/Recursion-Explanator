@@ -1,11 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
-
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class RecursionGUI extends JFrame{
     //Main GUI window  dimensions
@@ -15,6 +13,12 @@ public class RecursionGUI extends JFrame{
     //GUI components
     private JTextArea codeEditor;
     private JLabel fileStatus;
+    private JTextArea consoleOutput;
+
+    //Split Panes
+    private JSplitPane workspaceSplitPane;
+    private JSplitPane mainSplitPane;
+
 
     private File currentFile; //tracks the open Java File
     
@@ -26,7 +30,7 @@ public class RecursionGUI extends JFrame{
         setLocationRelativeTo(null);
 
         //Main Layout
-        setLayout(new BorderLayout(10, 10));
+        setLayout(new BorderLayout(5, 5));
 
         //Application Title
         JLabel title = new JLabel(
@@ -54,7 +58,67 @@ public class RecursionGUI extends JFrame{
 
         editorScrollPane.setBorder(BorderFactory.createTitledBorder("Java Code Editor"));
 
-        add(editorScrollPane, BorderLayout.CENTER);
+        //Visualization Workspace placeholder
+        JPanel vizPanel = new JPanel(new BorderLayout());
+
+        JLabel vizTitle = new JLabel(
+            "Visualization Workspace", SwingConstants.CENTER
+        );
+        vizTitle.setFont(
+            new Font("Arial", Font.BOLD, 18)
+        );
+
+        JLabel vizPlaceholder = new JLabel(
+            "Stack, Tree, and Array visualizations will appear here",
+            SwingConstants.CENTER
+        );
+
+        vizPanel.add(vizTitle, BorderLayout.NORTH);
+        vizPanel.add(vizPlaceholder, BorderLayout.CENTER);
+
+        vizPanel.setBorder(
+            BorderFactory.createTitledBorder("Visualizations")
+        );
+
+        //Horizontal Split
+        workspaceSplitPane = new JSplitPane(
+            JSplitPane.HORIZONTAL_SPLIT,
+            editorScrollPane,
+            vizPanel
+        );
+
+        workspaceSplitPane.setResizeWeight(0.5);
+        workspaceSplitPane.setContinuousLayout(true);
+        workspaceSplitPane.setOneTouchExpandable(true);
+        workspaceSplitPane.setDividerLocation(0.5);
+
+        //Console output placeholder
+        consoleOutput = new JTextArea();
+        consoleOutput.setFont(
+            new Font("Consolas", Font.PLAIN, 13)
+        );
+        consoleOutput.setEditable(false);
+        consoleOutput.setText("Program output will appear here");
+
+        JScrollPane consoleScrollPane = new JScrollPane(consoleOutput);
+
+        consoleScrollPane.setBorder(
+            BorderFactory.createTitledBorder("Console Output")
+        );
+
+        //Verticle split
+        mainSplitPane = new JSplitPane(
+            JSplitPane.VERTICAL_SPLIT,
+            workspaceSplitPane,
+            consoleScrollPane
+        );
+
+        mainSplitPane.setResizeWeight(0.8);
+        mainSplitPane.setContinuousLayout(true);
+        mainSplitPane.setOneTouchExpandable(true);
+        mainSplitPane.setDividerLocation(0.8);
+
+        add(mainSplitPane, BorderLayout.CENTER);
 
         //File Status Bar
         fileStatus = new JLabel("No file currently loaded");
@@ -85,8 +149,8 @@ public class RecursionGUI extends JFrame{
         return toolbar;
     }
 
-    //Opens the File Chooser and loads the Java Source File
-    private void openJavaFile() {
+    //Windows-Style Java file chooser
+    private JFileChooser createJavaFileChooser(){
         JFileChooser fileChooser = new JFileChooser();
 
         fileChooser.setFileFilter(
@@ -95,6 +159,13 @@ public class RecursionGUI extends JFrame{
                 "java"
             )
         );
+
+        return fileChooser;
+    }
+
+    //Opens the file chooser and loads the selected Java file
+    private void openJavaFile(){
+        JFileChooser fileChooser = createJavaFileChooser();
 
         int result = fileChooser.showOpenDialog(this);
 
@@ -115,10 +186,12 @@ public class RecursionGUI extends JFrame{
                     "Loaded: " + currentFile.getName()
                 );
 
-                setTitle( "Recursive Explanator -" + currentFile.getName());
+                setTitle(
+                    "Crecursion Explanator - " + currentFile.getName()
+                );
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(
-                    this, "Could not open selected file:\n" + ex.getMessage(),
+                    this, "Could not open selected file: \n" + ex.getMessage(),
                     "File Error", JOptionPane.ERROR_MESSAGE
                 );
             }
@@ -126,16 +199,9 @@ public class RecursionGUI extends JFrame{
     }
 
     //Saves the contents of the editor to the current File
-    private void saveJavaFile(){
+    private void saveJavaFile() {
         if (currentFile == null) {
-            JFileChooser fileChooser = new JFileChooser();
-
-            fileChooser.setFileFilter(
-                new FileNameExtensionFilter(
-                    "Java Source Files (*.java)",
-                    "java"
-                )
-            );
+            JFileChooser fileChooser = createJavaFileChooser();
 
             int result = fileChooser.showSaveDialog(this);
 
@@ -146,15 +212,17 @@ public class RecursionGUI extends JFrame{
             currentFile = fileChooser.getSelectedFile();
 
             if (!currentFile.getName().toLowerCase().endsWith(".java")) {
+
                 currentFile = new File(
                     currentFile.getAbsolutePath() + ".java"
                 );
             }
         }
-        
+
         try {
             Files.writeString(
-                currentFile.toPath(), codeEditor.getText()
+                currentFile.toPath(),
+                codeEditor.getText()
             );
 
             fileStatus.setText(
@@ -162,11 +230,12 @@ public class RecursionGUI extends JFrame{
             );
 
             setTitle(
-                "Recursive Explanator - " + currentFile.getName()
+                "Recursion Explanator - " + currentFile.getName()
             );
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(
-                this, "could not save the file:\n" + ex.getMessage(),
+                this,
+                "Could not save the file: \n" + ex.getMessage(),
                 "Save Error", JOptionPane.ERROR_MESSAGE
             );
         }
@@ -195,8 +264,27 @@ public class RecursionGUI extends JFrame{
     
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            RecursionGUI gui = new RecursionGUI();
-            gui.setVisible(true);
+            
+            //Use system's native Swing appearance
+            try {
+                UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName()
+                );
+            } catch (Exception e) {
+                System.out.println("Could not load system look and feel");
+            }
+
+            SwingUtilities.invokeLater(() -> {
+                RecursionGUI gui = new RecursionGUI();
+
+                gui.setVisible(true);
+
+                //Set divider positions after window is displayed
+                SwingUtilities.invokeLater(() -> {
+                    gui.workspaceSplitPane.setDividerLocation(0.5);
+                    gui.mainSplitPane.setDividerLocation(0.8);
+                });
+            });
         });
     }
 }
