@@ -1,278 +1,113 @@
-# \# Recursion Explanator
+# Recursion Explanator
 
-# 
+A Java-based desktop application for analyzing and visualizing recursive methods. Follow recursive calls, returns, and call stack behavior step by step through an interactive graphical interface.
 
-# \*\*A Java recursion analysis and visualization tool that helps programmers understand how recursive methods execute, step by step.\*\*
+## Features
 
-# 
+### Code Analysis
+- Automatically analyzes Java source code.
+- Identifies recursive methods.
+- Detects recursive calls and base cases.
+- Displays information about identified recursive methods.
 
-# Recursion Explanator is a Java-based desktop application designed to make recursion easier to understand. It analyzes Java source code, identifies recursive methods, and visualizes recursive calls, returns, and the call stack as a program executes.
+### Recursion Visualization
+- Displays recursive CALL and RETURN events.
+- Shows return values as methods complete.
+- Visualizes the recursive call stack.
+- Tracks the order of recursive execution.
+- Supports configurable maximum visualization depth.
 
-# 
+### Program Execution
+- Compiles and executes user-provided Java programs.
+- Captures compiler messages and program output.
+- Runs programs directly through the application.
+- Uses background execution to keep the GUI responsive.
 
-# Instead of simply displaying the final output, Recursion Explanator allows users to follow the execution process and see how recursive methods work internally.
+### Execution Controls
+- Step through recursive execution one event at a time.
+- Continue execution automatically.
+- Follow recursive calls and returns as they happen.
 
-# 
+### Graphical Interface
+- Java Swing graphical interface.
+- Integrated Java code editor.
+- Open and save Java source files.
+- Clear the code editor.
+- Integrated output console.
+- Dark Mode and Light Mode.
 
-# \---
+## Screenshots
 
-# 
+Screenshots of the application will be added here.
 
-# \## Features
+## Requirements
 
-# 
+- Java Development Kit (JDK) installed.
+- Java compiler (`javac`) available through the system PATH.
+- Java runtime (`java`) available through the system PATH.
 
-# \### Recursive Code Analysis
+## Installation
 
-# \- Automatically analyze Java source code.
+### Clone the Repository
 
-# \- Identify recursive methods.
+```bash
+git clone https://github.com/JacksonFishbein/Recursion-Explanator.git
+```
 
-# \- Detect recursive calls and base cases.
+Navigate into the project directory:
 
-# \- Display information about identified recursive methods.
+```bash
+cd Recursion-Explanator
+```
 
-# 
+### Launch on Windows
 
-# \### Recursion Visualization
+Double-click the following file:
 
-# \- Display recursive `CALL` and `RETURN` events.
+`WINDOWS - Recursion Explanator.bat`
 
-# \- Show return values as methods complete.
+### Launch on macOS
 
-# \- Visualize the recursive call stack.
+Double-click the following file:
 
-# \- Track the order in which recursive methods execute.
+`MAC_OS - Recursion Explanator.command`
 
-# \- Configure the maximum recursion visualization depth.
+If macOS prevents the launcher from running, open Terminal in the project directory and execute:
 
-# 
+```bash
+chmod +x "MAC_OS - Recursion Explanator.command"
+```
 
-# \### Program Execution
+Then launch the file again.
 
-# \- Compile and execute user-provided Java programs.
+The launchers compile the Java source files and start the graphical application.
 
-# \- Capture compiler messages and program output.
+## Manual Compilation
 
-# \- Execute programs directly through the application.
+Compile the application:
 
-# \- Use background execution to prevent the GUI from freezing.
+```bash
+javac RecursionGUI.java RecursionExplanator.java RunInputProgram.java
+```
 
-# 
+Launch the application:
 
-# \### Execution Controls
+```bash
+java RecursionGUI
+```
 
-# \- Step through recursive execution one event at a time.
+## Technologies Used
 
-# \- Automatically continue execution.
-
-# \- Follow recursive calls and returns as they happen.
-
-# 
-
-# \### Desktop GUI
-
-# \- Java Swing graphical interface.
-
-# \- Integrated Java code editor.
-
-# \- Open and save Java source files.
-
-# \- Clear the code editor.
-
-# \- Integrated output console.
-
-# \- Dark Mode and Light Mode.
-
-# \- Cross-platform launcher support for Windows and macOS.
-
-# 
-
-# \---
-
-# 
-
-# \## Screenshots
-
-# 
-
-# Screenshots of the application will be added here.
-
-# 
-
-# \---
-
-# 
-
-# \## Requirements
-
-# 
-
-# Before running Recursion Explanator, make sure you have:
-
-# 
-
-# \- Java Development Kit (JDK) installed.
-
-# \- Java compiler (`javac`) available through your system PATH.
-
-# \- Java runtime (`java`) available through your system PATH.
-
-# 
-
-# The application uses Java Swing for its graphical interface.
-
-# 
-
-# \---
-
-# 
-
-# \## Installation
-
-# 
-
-# \### 1. Clone the Repository
-
-# 
-
-# ```bash
-
-# git clone https://github.com/JacksonFishbein/Recursion-Explanator.git
-
-# ```
-
-# 
-
-# Navigate into the project directory:
-
-# 
-
-# ```bash
-
-# cd Recursion-Explanator
-
-# ```
-
-# 
-
-# \### 2. Launch the Application
-
-# 
-
-# \*\*Windows\*\*
-
-# 
-
-# Double-click:
-
-# 
-
-# `WINDOWS - Recursion Explanator.bat`
-
-# 
-
-# \*\*macOS\*\*
-
-# 
-
-# Double-click:
-
-# 
-
-# `MAC\_OS - Recursion Explanator.command`
-
-# 
-
-# If macOS does not allow the launcher to run, open Terminal in the project directory and execute:
-
-# 
-
-# ```bash
-
-# chmod +x "MAC\_OS - Recursion Explanator.command"
-
-# ```
-
-# 
-
-# Then double-click the launcher again.
-
-# 
-
-# The launchers compile the Java source files and start the graphical application.
-
-# 
-
-# \---
-
-# 
-
-# \## Manual Compilation
-
-# 
-
-# You can also compile and launch the application manually.
-
-# 
-
-# Compile:
-
-# 
-
-# ```bash
-
-# javac RecursionGUI.java RecursionExplanator.java RunInputProgram.java
-
-# ```
-
-# 
-
-# Launch:
-
-# 
-
-# ```bash
-
-# java RecursionGUI
-
-# ```
-
-# 
-
-# \---
-
-# 
-
-# \## Technologies Used
-
-# 
-
-# \- \*\*Java\*\* – Core application and program execution.
-
-# \- \*\*Java Swing\*\* – Graphical user interface.
-
-# \- \*\*Java Compiler API\*\* – Compilation of submitted Java programs.
-
-# \- \*\*SwingWorker\*\* – Background execution and GUI responsiveness.
-
-# \- \*\*Java Runtime Instrumentation\*\* – Tracking recursive calls and returns.
-
-# \- \*\*Git \& GitHub\*\* – Version control and project development.
-
-# 
-
-# \---
-
-# 
-
-# \## Project Goals
-
-# 
-
-# The goal of Recursion Explanator is to make recursion more approachable by providing a visual representation of what happens behind the scenes during recursive execution.
-
-# 
-
-# By combining source code analysis, runtime instrumentation, and interactive execution controls, the application helps programmers develop a stronger understanding of recursion and call stack behavior.
-
+- Java
+- Java Swing
+- Java Compiler API
+- SwingWorker
+- Runtime source-code instrumentation
+- Git
+- GitHub
+
+## Project Goals
+
+Recursion Explanator aims to make recursion easier to understand by showing what happens behind the scenes during recursive execution.
+
+By combining source code analysis, runtime instrumentation, and interactive execution controls, the application helps programmers develop a stronger understanding of recursion and call stack behavior.
