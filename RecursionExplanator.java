@@ -1,6 +1,7 @@
 import java.util.*;
 import java.util.regex.*;
 import java.nio.file.*;
+import java.util.function.Consumer;
 
 public class RecursionExplanator {
    static Scanner scanner = new Scanner(System.in);
@@ -100,13 +101,16 @@ public class RecursionExplanator {
       }
 
    public static void analyzeCode(String code) {
-   
+      analyzeCode(code, System.out::println);
+   }
+
+   public static void analyzeCode(String code, Consumer<String> output) {
       String[] lines = code.split("\\R");
-   
+
       for (int i = 0; i < lines.length; i++) {
-      
+
          String line = lines[i];
-      
+
          // Look for method declaration
          Pattern methodPattern = Pattern.compile(
             "(public|private|protected)?\\s*" +
@@ -114,75 +118,75 @@ public class RecursionExplanator {
             "[\\w<>\\[\\]]+\\s+" +
             "(\\w+)\\s*\\([^)]*\\)\\s*\\{?"
          );
-      
+
          Matcher methodMatcher = methodPattern.matcher(line);
-      
+
          if (!methodMatcher.find()) {
             continue;
          }
-      
+
          String methodName = methodMatcher.group(3);
-      
+
          // Find end of the method
          int braceCount = 0;
          boolean started = false;
          int end = i;
-      
+
          for (int j = i; j < lines.length; j++) {
             for (char c : lines[j].toCharArray()) {
                if (c == '{') {
                   braceCount++;
                   started = true;
                }
-            
+
                else if (c == '}') {
                   braceCount--;
                }
             }
-         
+
             if (started && braceCount == 0) {
                end = j;
                break;
             }
          }
-      
+
          // Search this method to see if calls itself
          List<String> recursiveCalls = new ArrayList<>();
          for (int j = i + 1; j <= end; j++) {
             Pattern callPattern = Pattern.compile(
                "\\b" + Pattern.quote(methodName) + "\\s*\\([^;]*?\\)"
             );
-         
+
             Matcher callMatcher = callPattern.matcher(lines[j]);
-         
+
             while (callMatcher.find()) {
                recursiveCalls.add(callMatcher.group());
             }
          }
-      
+
          // If no self calls = method not recursive
          if (recursiveCalls.isEmpty()) {
             continue;
          }
-      
-         System.out.println("----------------------------------------");
-         System.out.println("Recursive Method: " + methodName);
-         System.out.println();
-      
+
+         output.accept("----------------------------------------");
+         output.accept("Recursive Method: " + methodName);
+         output.accept("");
+
          // Find if statements for base case search
-         System.out.println("Base Case:");
-      
+         output.accept("Base Case:");
+
          boolean found = false;
          for (int j = i +1; j <= end; j++) {
             String trimmed = lines[j].trim();
             if (trimmed.startsWith("if")) {
                found = true;
-               System.out.println(lines[j]);
-            
+               output.accept(lines[j]);
+
                // If open brace on this line, print all following until closing brace
                if (trimmed.contains("{")) {
                   int nestedBraces = 0;
-               
+
                   for (int k = j; k <= end; k++) {
                      for (char c : lines[k].toCharArray()) {
                         if (c == '{') {
@@ -192,32 +196,32 @@ public class RecursionExplanator {
                            nestedBraces--;
                         }
                      }
-               
+
                      if (k != j) {
-                        System.out.println(lines[k]);
+                        output.accept(lines[k]);
                      }
-               
+
                      if (nestedBraces == 0) {
                         break;
                      }
                   }
-               
+
                   break;
                }
             }
          }
-      
+
          if (!found) {
-            System.out.println("No if statement found.");
+            output.accept("No if statement found.");
          }
-      
-         System.out.println();
-         System.out.println("Recursive Calls:");
+
+         output.accept("");
+         output.accept("Recursive Calls:");
          for (String call : recursiveCalls) {
-            System.out.println(call);
+            output.accept(call);
          }
-      
-         System.out.println();
+
+         output.accept("");
       }
    }
 }
